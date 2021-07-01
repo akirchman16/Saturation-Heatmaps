@@ -13,7 +13,7 @@ RAD51 = 51; %value that will be stored on lattice to represent bound RAD51
 n_RAD51 = 3;    %length of RAD51 protein
 
 L_RAD51_Total_Values = 2;  %total concentration of RAD51 in solution
-Percent_M_RAD51_Values = 1;    %percentage of RAD51 solution which is monomers
+Percent_M_RAD51_Values = 0.5;    %percentage of RAD51 solution which is monomers
 w_RAD51_Values = 1;    %cooperativity parameter for RAD51
 k_on_RAD51_Values = 1;     %kinetic rate constant for RAD51 binding to ssDNA
 k_off_RAD51_Values = 1;    %kinetic rate constant for RAD51 dissociating from ssDNA
@@ -36,9 +36,6 @@ n_RPA = sum([n_A,n_D]);   %calculates total length of RPA molecule
 Parameters = combvec(L_RAD51_Total_Values,Percent_M_RAD51_Values,w_RAD51_Values,k_on_RAD51_Values,k_off_RAD51_Values,L_RPA_Values,k_on_RPA_A_Values,k_on_RPA_D_Values,k_off_RPA_A_Values,k_off_RPA_D_Values);   %combination of all possible parameter sets
 
 % Memory Allocation
-RPA_Avg_Saturation = zeros(1,numel(Parameters)/10);
-RAD51_Avg_Saturation = zeros(1,numel(Parameters)/10);
-t_Equilibrium = zeros(1,numel(Parameters)/10);
 
 for Simulations = 1:(numel(Parameters)/10)
     PlotVars = {'t','FracCover_RAD51','FracCover_RPA','FracCover_RPA_A','FracCover_RPA_D','FracCover_Total'};  %variables used for graphs that need to be cleared
@@ -425,9 +422,9 @@ for Simulations = 1:(numel(Parameters)/10)
     scatter(t,FracCover_RPA_D,1,'blue','filled');   %RPA-D Saturation
     scatter(t,FracCover_RPA,1,'magenta','filled');  %RPA Saturation
     scatter(t,FracCover_Total,1,'black','filled');  %total protein saturation
-    xline(t_Equilibrium(Simulations), '--k',['t: ', num2str(round(t_Equilibrium(Simulations),2))],'LabelHorizontalAlignment','left');
-    yline(RPA_Avg_Saturation(Simulations),'--k',['RPA: ', num2str(round(RPA_Avg_Saturation(Simulations),2))],'LabelHorizontalAlignment','left');
-    yline(RAD51_Avg_Saturation(Simulations),'--k',['RAD51: ', num2str(round(RAD51_Avg_Saturation(Simulations),2))],'LabelHorizontalAlignment','left');
+    xline(t_Equilibrium, '--k',['t: ', num2str(round(t_Equilibrium(Simulations),2))],'LabelHorizontalAlignment','left');
+    yline(RPA_Avg_Saturation,'--k',['RPA: ', num2str(round(RPA_Avg_Saturation(Simulations),2))],'LabelHorizontalAlignment','left');
+    yline(RAD51_Avg_Saturation,'--k',['RAD51: ', num2str(round(RAD51_Avg_Saturation(Simulations),2))],'LabelHorizontalAlignment','left');
     xlabel('Time, t');
     xlim([0 max(t)]);
     ylabel('Saturation');
