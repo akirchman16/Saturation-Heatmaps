@@ -38,6 +38,9 @@ Parameters = combvec(L_RAD51_Total_Values,Percent_M_RAD51_Values,w_RAD51_Values,
 % Memory Allocation
 
 for Simulations = 1:(numel(Parameters)/10)
+    Variables = {'t','FracCover_RAD51','FracCover_RPA','FracCover_RPA_A','FracCover_RPA_D','FracCover_Total'};  %variables used for graphs that need to be cleared
+    clear Variables;    %clears variables so graphs are useful
+    
     % Referencing each parameter value for each simulation
     L_RAD51_Total = Parameters(1,Simulations);  %Total RAD51 Concentration
     Percent_M_RAD51 = Parameters(2,Simulations); %Percentage of RAD51 solution which is monomers
