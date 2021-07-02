@@ -401,12 +401,12 @@ for Simulations = 1:(numel(Parameters)/10)
             RPA_Fit = polyfit(t_Equilibrium_Test,RPA_Equilibrium_Test,1);   %linear fit to RPA data (slope, y-int)
             RPA_Yint_Error = abs(RPA_Avg_Saturation-RPA_Fit(2))/RPA_Avg_Saturation;    %y-intercept error compared to average RPA saturation
 
-            if abs(RPA_Fit(1)) < 0.01 & RPA_Yint_Error < 0.05   %if slope of RPA data is essentially zero and y-intercept is very close to avg. saturation value... (slope limit is change in saturation of 1% (~17 proteins) per 1 time interval)
+            if abs(RPA_Fit(1)) < 0.01 & (RPA_Yint_Error < 0.05 | isnan(RPA_Yint_Error))   %if slope of RPA data is essentially zero and y-intercept is very close to avg. saturation value... (slope limit is change in saturation of 1% (~17 proteins) per 1 time interval)
                 Equilibrium_RPA = 1;    %...then at equilibrium
             else
                 Equilibrium_RPA = 0;    %...otherwise reset to not at equilibrium
             end
-            if abs(RAD51_Fit(1)) < 0.01 & RAD51_Yint_Error < 0.05 %if the slope of RAD51 data is essentially zero and y-intercept is very close to avg. saturation value... (slope limit is change in saturation of 1% (~3 proteins) per 1 time interval)
+            if abs(RAD51_Fit(1)) < 0.01 & (RAD51_Yint_Error < 0.05 | isnan(RAD51_Yint_Error)) %if the slope of RAD51 data is essentially zero and y-intercept is very close to avg. saturation value... (slope limit is change in saturation of 1% (~3 proteins) per 1 time interval)
                 Equilibrium_RAD51 = 1;  %...then we're at equilibrium
             else
                 Equilibrium_RAD51 = 0;    %...otherwise reset to not at equilibrium
