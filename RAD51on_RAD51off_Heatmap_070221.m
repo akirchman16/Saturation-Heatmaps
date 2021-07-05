@@ -1,6 +1,6 @@
 clearvars
 close all;
-tic
+% tic
 
 % Generates a heatmap figure for variations of the two parameters
 % k_on_RAD51 and k_off_RAD51. It allows for plotting the growth profile of
@@ -416,7 +416,7 @@ for Simulations = 1:(numel(Parameters)/10)
 
     t_Equilibrium(Simulations) = t(Event_Count+1-round(0.25*(Event_Count+1)));   %time where equilibrium occured
 
-    toc
+%     toc
     
     figure(Simulations);  %plots of saturation over time
     scatter(t,FracCover_RAD51,1,'red','filled');    %RAD51 Saturation
