@@ -6,6 +6,8 @@ close all;
 % simulation. A "heatmap" will then be generated based on the final
 % population for various parameter sets.
 
+tic
+
 k_f_Range = 0.1:0.1:10;   %range of values for k_f
 k_r_Range = 0.1:0.1:10;   %range of values for k_r
 
@@ -61,3 +63,5 @@ xlabel('k_f');
 ylabel('k_r');
 title('A Population - 100 Events');
 colorbar('Ticks',0:10:100);
+
+toc
