@@ -16,8 +16,8 @@ n_RAD51 = 3;    %length of RAD51 protein
 L_RAD51_Total_Values = 2;  %total concentration of RAD51 in solution
 Percent_M_RAD51_Values = 1;    %percentage of RAD51 solution which is monomers
 w_RAD51_Values = 1;    %cooperativity parameter for RAD51
-k_on_RAD51_Values = [0.1:0.1:1];     %kinetic rate constant for RAD51 binding to ssDNA
-k_off_RAD51_Values = [0.1:0.1:1];    %kinetic rate constant for RAD51 dissociating from ssDNA
+k_on_RAD51_Values = [0.1,10];     %kinetic rate constant for RAD51 binding to ssDNA
+k_off_RAD51_Values = [0.1,10];    %kinetic rate constant for RAD51 dissociating from ssDNA
 
 % RPA Parameters
 RPA_A = 1;  %value to represent A piece of RPA on lattice
@@ -387,8 +387,6 @@ for Simulations = 1:(numel(Parameters)/10)
         FracCover_Total(Event_Count+1) = sum([FracCover_RAD51(Event_Count+1),FracCover_RPA(Event_Count+1)]);  %total saturation of the lattice (both RPA and RAD51)
 
     % Equilibrium Testing - Linear Slope & Intercept Method %%%%%%%%%%%%%%%%%%%
-        EquilibriumBoundary_RPA = 10;    %+/- number of RPA proteins which are the boundary of equilibrium tests
-        EquilibriumBoundary_RAD51 = 10;  %+/- number of RAD51 proteins which are the boundary of equilibrium tests
         if Event_Count >= 1000 %only tests for equilibrium after 1000 events have occured
             t_Equilibrium_Test = t(Event_Count+1-round(0.25*(Event_Count+1)):end);  %time values that we're testing for equilibrium
             RPA_Equilibrium_Test = FracCover_RPA(((Event_Count+1)-round(0.25*(Event_Count+1))):end);   %last 1/4 of Events saturation data for RPA
