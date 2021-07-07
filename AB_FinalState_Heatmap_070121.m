@@ -8,8 +8,8 @@ close all;
 
 tic
 
-k_f_Range = 0.1:0.1:10;   %range of values for k_f
-k_r_Range = 0.1:0.1:10;   %range of values for k_r
+k_f_Range = 0.01:0.01:10;   %range of values for k_f
+k_r_Range = 0.01:0.01:10;   %range of values for k_r
 
 Parameters = combvec(k_f_Range,k_r_Range);  %all parameter sets
 
