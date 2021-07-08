@@ -46,6 +46,7 @@ Run_Times = zeros(1,numel(Parameters)/10);
 prog_bar = waitbar(0,['Simulation 0/', num2str(numel(Parameters)/10), ' (0%)']);    %generates progress bar to count simulations (first step)
 
 for Simulations = 1:(numel(Parameters)/10)
+    tic;    %begins timing for simulation
     PlotVars = {'t','FracCover_RAD51','FracCover_RPA','FracCover_RPA_A','FracCover_RPA_D','FracCover_Total'};  %variables used for graphs that need to be cleared
     clear (PlotVars{:});    %clears variables so graphs are useful
     
@@ -440,6 +441,7 @@ for Simulations = 1:(numel(Parameters)/10)
 %     box on;
 
     waitbar(Simulations/(numel(Parameters)/10),prog_bar,['Simulation ', num2str(Simulations), '/', num2str(numel(Parameters)/10), '(', num2str(round(((Simulations)/(numel(Parameters)/10))*100,2)), '%)']); %updates progress bar to show how many simulations have been completed
+    Run_Times(Simulations) = toc;   %stores time it took for simulation to complete
 end
 delete(prog_bar);   %closes progress bar
 
@@ -458,3 +460,4 @@ legend('RPA','RAD51','Total');
 box on;
 
 Total_Run_Time = sum(Run_Times);    %total time it took the model to run
+disp('Total Run Time: ', num2str(round(Total_Run_Time,2)));
