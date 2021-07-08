@@ -4,8 +4,9 @@ tic
 
 % This model takes the new model for RPA/RAD51 competition and runs it
 % multiple times. This will allow for the testing of multiple parameter
-% sets. Once this system is sufficient, then it will be used to generate
-% heatmaps of the equilibrium state of the system.
+% sets. Also allows for a single run to occur (just only input one value
+% for each parameter). Once this system is sufficient, then it will be used
+% to generate heatmaps of the equilibrium state of the system.
 
 N = 5000;   %length of ssDNA lattice
 % RAD51 Parameters
@@ -13,7 +14,7 @@ RAD51 = 51; %value that will be stored on lattice to represent bound RAD51
 n_RAD51 = 3;    %length of RAD51 protein
 
 L_RAD51_Total_Values = 2;  %total concentration of RAD51 in solution
-Percent_M_RAD51_Values = 1;    %percentage of RAD51 solution which is monomers
+Percent_M_RAD51_Values = 0.5;    %percentage of RAD51 solution which is monomers
 w_RAD51_Values = 1;    %cooperativity parameter for RAD51
 k_on_RAD51_Values = 1;     %kinetic rate constant for RAD51 binding to ssDNA
 k_off_RAD51_Values = 1;    %kinetic rate constant for RAD51 dissociating from ssDNA
