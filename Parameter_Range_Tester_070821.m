@@ -440,7 +440,7 @@ for Simulations = 1:(numel(Parameters)/10)
 %     legend('RAD51','RPA-A','RPA-D','All RPA','Total','location','southoutside','orientation','horizontal');
 %     box on;
 
-    waitbar(Simulations/(numel(Parameters)/10),prog_bar,['Simulation ', num2str(Simulations), '/', num2str(numel(Parameters)/10), '(', num2str(round(((Simulations)/(numel(Parameters)/10))*100,2)), '%)']); %updates progress bar to show how many simulations have been completed
+    waitbar(Simulations/(numel(Parameters)/10),prog_bar,['Simulation ', num2str(Simulations), '/', num2str(numel(Parameters)/10), ' (', num2str(round(((Simulations)/(numel(Parameters)/10))*100,2)), '%)']); %updates progress bar to show how many simulations have been completed
     Run_Times(Simulations) = toc;   %stores time it took for simulation to complete
 end
 delete(prog_bar);   %closes progress bar
