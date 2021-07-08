@@ -460,4 +460,4 @@ legend('RPA','RAD51','Total');
 box on;
 
 Total_Run_Time = sum(Run_Times);    %total time it took the model to run
-disp('Total Run Time: ', num2str(round(Total_Run_Time,2)));
+disp(['Total Run Time: ', num2str(round(Total_Run_Time,2))]);
