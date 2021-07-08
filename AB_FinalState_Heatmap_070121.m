@@ -6,8 +6,10 @@ close all;
 % simulation. A "heatmap" will then be generated based on the final
 % population for various parameter sets.
 
-k_f_Range = 0.1:0.1:10;   %range of values for k_f
-k_r_Range = 0.1:0.1:10;   %range of values for k_r
+tic
+
+k_f_Range = 0.01:0.01:10;   %range of values for k_f
+k_r_Range = 0.01:0.01:10;   %range of values for k_r
 
 Parameters = combvec(k_f_Range,k_r_Range);  %all parameter sets
 
@@ -61,3 +63,5 @@ xlabel('k_f');
 ylabel('k_r');
 title('A Population - 100 Events');
 colorbar('Ticks',0:10:100);
+
+toc

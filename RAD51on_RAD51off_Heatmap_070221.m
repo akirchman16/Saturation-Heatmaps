@@ -1,11 +1,12 @@
 clearvars
 close all;
-tic
 
 % Generates a heatmap figure for variations of the two parameters
 % k_on_RAD51 and k_off_RAD51. It allows for plotting the growth profile of
 % each simulation but also the heatmaps. Heatmaps generated include RAD51
 % saturation, RPA saturation, and time to equilibrium.
+
+tic
 
 N = 5000;   %length of ssDNA lattice
 % RAD51 Parameters
@@ -15,8 +16,8 @@ n_RAD51 = 3;    %length of RAD51 protein
 L_RAD51_Total_Values = 2;  %total concentration of RAD51 in solution
 Percent_M_RAD51_Values = 1;    %percentage of RAD51 solution which is monomers
 w_RAD51_Values = 1;    %cooperativity parameter for RAD51
-k_on_RAD51_Values = [0.1,1];     %kinetic rate constant for RAD51 binding to ssDNA
-k_off_RAD51_Values = [0.1,1];    %kinetic rate constant for RAD51 dissociating from ssDNA
+k_on_RAD51_Values = [0.1,10];     %kinetic rate constant for RAD51 binding to ssDNA
+k_off_RAD51_Values = [0.1,10];    %kinetic rate constant for RAD51 dissociating from ssDNA
 
 % RPA Parameters
 RPA_A = 1;  %value to represent A piece of RPA on lattice
@@ -415,7 +416,7 @@ parfor Simulations = 1:(numel(Parameters)/10)
     t_Equilibrium(Simulations) = t(Event_Count+1-round(0.25*(Event_Count+1)));   %time where equilibrium occured
 
 %     toc
-%     
+
 %     figure(Simulations);  %plots of saturation over time
 %     scatter(t,FracCover_RAD51,1,'red','filled');    %RAD51 Saturation
 %     hold on;
