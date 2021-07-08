@@ -41,7 +41,7 @@ RPA_Avg_Saturation = zeros(1,numel(Parameters)/10);
 RAD51_Avg_Saturation = zeros(1,numel(Parameters)/10);
 t_Equilibrium = zeros(1,numel(Parameters)/10);
 
-for Simulations = 1:(numel(Parameters)/10)
+parfor Simulations = 1:(numel(Parameters)/10)
     PlotVars = {'t','FracCover_RAD51','FracCover_RPA','FracCover_RPA_A','FracCover_RPA_D','FracCover_Total'};  %variables used for graphs that need to be cleared
     clear (PlotVars{:});    %clears variables so graphs are useful
     
@@ -416,24 +416,24 @@ for Simulations = 1:(numel(Parameters)/10)
     t_Equilibrium(Simulations) = t(Event_Count+1-round(0.25*(Event_Count+1)));   %time where equilibrium occured
 
 %     toc
-    
-    figure(Simulations);  %plots of saturation over time
-    scatter(t,FracCover_RAD51,1,'red','filled');    %RAD51 Saturation
-    hold on;
-    scatter(t,FracCover_RPA_A,1,'cyan','filled');   %RPA-A Saturation
-    scatter(t,FracCover_RPA_D,1,'blue','filled');   %RPA-D Saturation
-    scatter(t,FracCover_RPA,1,'magenta','filled');  %RPA Saturation
-    scatter(t,FracCover_Total,1,'black','filled');  %total protein saturation
-    xline(t_Equilibrium(Simulations), '--k',['t: ', num2str(round(t_Equilibrium(Simulations),2))],'LabelHorizontalAlignment','left');
-    yline(RPA_Avg_Saturation(Simulations),'--k',['RPA: ', num2str(round(RPA_Avg_Saturation(Simulations),2))],'LabelHorizontalAlignment','left');
-    yline(RAD51_Avg_Saturation(Simulations),'--k',['RAD51: ', num2str(round(RAD51_Avg_Saturation(Simulations),2))],'LabelHorizontalAlignment','left');
-    xlabel('Time, t');
-    xlim([0 max(t)]);
-    ylabel('Saturation');
-    ylim([0 1]);
-    title('RAD51/RPA Competition Saturation');
-    legend('RAD51','RPA-A','RPA-D','All RPA','Total','location','southoutside','orientation','horizontal');
-    box on;
+
+%     figure(Simulations);  %plots of saturation over time
+%     scatter(t,FracCover_RAD51,1,'red','filled');    %RAD51 Saturation
+%     hold on;
+%     scatter(t,FracCover_RPA_A,1,'cyan','filled');   %RPA-A Saturation
+%     scatter(t,FracCover_RPA_D,1,'blue','filled');   %RPA-D Saturation
+%     scatter(t,FracCover_RPA,1,'magenta','filled');  %RPA Saturation
+%     scatter(t,FracCover_Total,1,'black','filled');  %total protein saturation
+%     xline(t_Equilibrium(Simulations), '--k',['t: ', num2str(round(t_Equilibrium(Simulations),2))],'LabelHorizontalAlignment','left');
+%     yline(RPA_Avg_Saturation(Simulations),'--k',['RPA: ', num2str(round(RPA_Avg_Saturation(Simulations),2))],'LabelHorizontalAlignment','left');
+%     yline(RAD51_Avg_Saturation(Simulations),'--k',['RAD51: ', num2str(round(RAD51_Avg_Saturation(Simulations),2))],'LabelHorizontalAlignment','left');
+%     xlabel('Time, t');
+%     xlim([0 max(t)]);
+%     ylabel('Saturation');
+%     ylim([0 1]);
+%     title('RAD51/RPA Competition Saturation');
+%     legend('RAD51','RPA-A','RPA-D','All RPA','Total','location','southoutside','orientation','horizontal');
+%     box on;
 end
 
 [X_Heatmap,Y_Heatmap] = meshgrid(k_on_RAD51_Values,k_off_RAD51_Values); %generates X and Y values for heatmaps
