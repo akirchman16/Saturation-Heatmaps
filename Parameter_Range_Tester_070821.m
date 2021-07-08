@@ -13,7 +13,7 @@ N = 5000;   %length of ssDNA lattice
 RAD51 = 51; %value that will be stored on lattice to represent bound RAD51
 n_RAD51 = 3;    %length of RAD51 protein
 
-L_RAD51_Total_Values = [1,2];  %total concentration of RAD51 in solution
+L_RAD51_Total_Values = [1,2,0.5];  %total concentration of RAD51 in solution
 Percent_M_RAD51_Values = 0.5;    %percentage of RAD51 solution which is monomers
 w_RAD51_Values = 1;    %cooperativity parameter for RAD51
 k_on_RAD51_Values = 1;     %kinetic rate constant for RAD51 binding to ssDNA
@@ -41,6 +41,9 @@ Parameter_Name = {'RAD51 Total Concentration (L_R_A_D_5_1)', 'RAD51 Monomer % (\
 RPA_Avg_Saturation = zeros(1,numel(Parameters)/10);
 RAD51_Avg_Saturation = zeros(1,numel(Parameters)/10);
 t_Equilibrium = zeros(1,numel(Parameters)/10);
+Run_Times = zeros(1,numel(Parameters)/10);
+
+prog_bar = waitbar(0,['Simulation 0/', num2str(numel(Parameters)/10), ' (0%)']);    %generates progress bar to count simulations (first step)
 
 for Simulations = 1:(numel(Parameters)/10)
     PlotVars = {'t','FracCover_RAD51','FracCover_RPA','FracCover_RPA_A','FracCover_RPA_D','FracCover_Total'};  %variables used for graphs that need to be cleared
@@ -418,24 +421,27 @@ for Simulations = 1:(numel(Parameters)/10)
 
     t_Equilibrium(Simulations) = t(Event_Count+1-round(0.25*(Event_Count+1)));   %time where equilibrium occured
     
-    figure(Simulations);  %plots of saturation over time
-    scatter(t,FracCover_RAD51,1,'red','filled');    %RAD51 Saturation
-    hold on;
-    scatter(t,FracCover_RPA_A,1,'cyan','filled');   %RPA-A Saturation
-    scatter(t,FracCover_RPA_D,1,'blue','filled');   %RPA-D Saturation
-    scatter(t,FracCover_RPA,1,'magenta','filled');  %RPA Saturation
-    scatter(t,FracCover_Total,1,'black','filled');  %total protein saturation
-    xline(t_Equilibrium(Simulations), '--k',['t: ', num2str(round(t_Equilibrium(Simulations),2))],'LabelHorizontalAlignment','left');
-    yline(RPA_Avg_Saturation(Simulations),'--k',['RPA: ', num2str(round(RPA_Avg_Saturation(Simulations),2))],'LabelHorizontalAlignment','left');
-    yline(RAD51_Avg_Saturation(Simulations),'--k',['RAD51: ', num2str(round(RAD51_Avg_Saturation(Simulations),2))],'LabelHorizontalAlignment','left');
-    xlabel('Time, t');
-    xlim([0 max(t)]);
-    ylabel('Saturation');
-    ylim([0 1]);
-    title('RAD51/RPA Competition Saturation');
-    legend('RAD51','RPA-A','RPA-D','All RPA','Total','location','southoutside','orientation','horizontal');
-    box on;
+%     figure(Simulations);  %plots of saturation over time
+%     scatter(t,FracCover_RAD51,1,'red','filled');    %RAD51 Saturation
+%     hold on;
+%     scatter(t,FracCover_RPA_A,1,'cyan','filled');   %RPA-A Saturation
+%     scatter(t,FracCover_RPA_D,1,'blue','filled');   %RPA-D Saturation
+%     scatter(t,FracCover_RPA,1,'magenta','filled');  %RPA Saturation
+%     scatter(t,FracCover_Total,1,'black','filled');  %total protein saturation
+%     xline(t_Equilibrium(Simulations), '--k',['t: ', num2str(round(t_Equilibrium(Simulations),2))],'LabelHorizontalAlignment','left');
+%     yline(RPA_Avg_Saturation(Simulations),'--k',['RPA: ', num2str(round(RPA_Avg_Saturation(Simulations),2))],'LabelHorizontalAlignment','left');
+%     yline(RAD51_Avg_Saturation(Simulations),'--k',['RAD51: ', num2str(round(RAD51_Avg_Saturation(Simulations),2))],'LabelHorizontalAlignment','left');
+%     xlabel('Time, t');
+%     xlim([0 max(t)]);
+%     ylabel('Saturation');
+%     ylim([0 1]);
+%     title('RAD51/RPA Competition Saturation');
+%     legend('RAD51','RPA-A','RPA-D','All RPA','Total','location','southoutside','orientation','horizontal');
+%     box on;
+
+    waitbar(Simulations/(numel(Parameters)/10),prog_bar,['Simulation ', num2str(Simulations), '/', num2str(numel(Parameters)/10), '(', num2str(round(((Simulations)/(numel(Parameters)/10))*100,2)), '%)']); %updates progress bar to show how many simulations have been completed
 end
+delete(prog_bar);   %closes progress bar
 
 Changing_Parameter = find(any(diff(Parameters,1,2) ~= 0, 2));  %row in Parameters vector that corresponds to the changing parameter
 
@@ -451,4 +457,4 @@ ylabel('Equilibrium Saturation');
 legend('RPA','RAD51','Total');
 box on;
 
-toc
+Total_Run_Time = sum(Run_Times);    %total time it took the model to run
