@@ -4,8 +4,8 @@ tic
 
 % This model takes the new model for RPA/RAD51 competition and runs it
 % multiple times. This will allow for the testing of multiple parameter
-% sets. Also allows for a single run to occur (just only input one value
-% for each parameter). Once this system is sufficient, then it will be used
+% sets. Requires multiple values for a parameter (any parameter other than
+% RPA cooperativity). Once this system is sufficient, then it will be used
 % to generate heatmaps of the equilibrium state of the system.
 
 N = 5000;   %length of ssDNA lattice
@@ -35,6 +35,7 @@ k_off_RPA_D_Values = 1; %kinetic rate constant for RPA-D dissociating from ssDNA
 n_RPA = sum([n_A,n_D]);   %calculates total length of RPA molecule
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Parameters = combvec(L_RAD51_Total_Values,Percent_M_RAD51_Values,w_RAD51_Values,k_on_RAD51_Values,k_off_RAD51_Values,L_RPA_Values,k_on_RPA_A_Values,k_on_RPA_D_Values,k_off_RPA_A_Values,k_off_RPA_D_Values);   %combination of all possible parameter sets
+Parameter_Name = {'RAD51 Total Concentration (L_R_A_D_5_1)', 'RAD51 Monomer % (\rho)','RAD51 Cooperativity (\omega_R_A_D_5_1)','RAD51 k_o_n','RAD51 k_o_f_f','RPA Concentration (L_R_P_A)','RPA-A k_o_n','RPA-D k_o_n','RPA-A k_o_f_f','RPA-D k_o_f_f'};    %names of all parameters (shows on graphs)
 
 % Memory Allocation
 RPA_Avg_Saturation = zeros(1,numel(Parameters)/10);
@@ -416,8 +417,6 @@ for Simulations = 1:(numel(Parameters)/10)
     end
 
     t_Equilibrium(Simulations) = t(Event_Count+1-round(0.25*(Event_Count+1)));   %time where equilibrium occured
-
-    toc
     
     figure(Simulations);  %plots of saturation over time
     scatter(t,FracCover_RAD51,1,'red','filled');    %RAD51 Saturation
@@ -438,12 +437,18 @@ for Simulations = 1:(numel(Parameters)/10)
     box on;
 end
 
-Changing_Parameter = find(any(diff(Parameters,1,2)) ~= 0);  %row in Parameters vector that corresponds to the changing parameter
+Changing_Parameter = find(any(diff(Parameters,1,2) ~= 0, 2) == 1);  %row in Parameters vector that corresponds to the changing parameter
 
 figure;
-scatter(Parameters(Changing_Parameter),RPA_Avg_Saturation,3,'m','filled');  %equilibrium saturation values for RPA
+scatter(Parameters(Changing_Parameter,:),RPA_Avg_Saturation,3,'m','filled');  %equilibrium saturation values for RPA
 hold on;
-scatter(Parameters(Changing_Parameter),RAD51_Avg_Saturation,3,'r','filled'); %equilibrium saturation values for RAD51
-scatter(Parameters(Changing_Parameter),RPA_Avg_Saturation+RAD51_Avg_Saturation,3,'k','filled'); %equilibrium saturation values for total saturation
+scatter(Parameters(Changing_Parameter,:),RAD51_Avg_Saturation,3,'r','filled'); %equilibrium saturation values for RAD51
+scatter(Parameters(Changing_Parameter,:),RPA_Avg_Saturation+RAD51_Avg_Saturation,3,'k','filled'); %equilibrium saturation values for total saturation
+xlim([0 max(Parameters(Changing_Parameter,:)]);
+ylim([0 1]
+xlabel(Parameter_Name(Changing_Parameter));
 ylabel('Equilibrium Saturation');
 legend('RPA','RAD51','Total');
+box on;
+
+toc
