@@ -41,7 +41,6 @@ Parameter_Name = {'RAD51 Total Concentration (L_R_A_D_5_1)', 'RAD51 Monomer % (\
 RPA_Avg_Saturation = zeros(1,numel(Parameters)/10);
 RAD51_Avg_Saturation = zeros(1,numel(Parameters)/10);
 t_Equilibrium = zeros(1,numel(Parameters)/10);
-prog_bar = waitbar(0,['Simulation 0/', num2str(numel(Parameters)/10), ' (0%)']);    %generates progress bar to count simulations (first step)
 Simulation_Times = zeros(1,numel(Parameters)/10);
 
 % Parameter Values used to avoid over communication to parallel workers
@@ -465,10 +464,8 @@ parfor Simulations = 1:(numel(Parameters)/10)
 %     legend('RAD51','RPA-A','RPA-D','All RPA','Total','location','southoutside','orientation','horizontal');
 %     box on;
 
-    waitbar(Simulations/(numel(Parameters)/10),prog_bar,['Simulation ', num2str(Simulations), '/', num2str(numel(Parameters)/10), ' (', num2str(round(((Simulations)/(numel(Parameters)/10))*100,2)), '%)']); %updates progress bar to show how many simulations have been completed
      Simulation_Times(Simulations) = toc;    %times each simulation
 end
-delete(prog_bar);   %closes progress bar
 
 Changing_Parameter = find(any(diff(Parameters,1,2) ~= 0, 2));  %row in Parameters vector that corresponds to the changing parameter
 
@@ -484,5 +481,4 @@ ylabel('Equilibrium Saturation');
 legend('RPA','RAD51','Total');
 box on;
 
-Total_Run_Time = sum(Run_Times);    %total time it took the model to run
-disp(['Total Run Time: ', num2str(round(Total_Run_Time,2))]);toc
+toc
