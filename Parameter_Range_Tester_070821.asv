@@ -13,7 +13,7 @@ N = 5000;   %length of ssDNA lattice
 RAD51 = 51; %value that will be stored on lattice to represent bound RAD51
 n_RAD51 = 3;    %length of RAD51 protein
 
-L_RAD51_Total_Values = [1,2,0.5];  %total concentration of RAD51 in solution
+L_RAD51_Total_Values = linspace(0.1,10,100);  %total concentration of RAD51 in solution
 Percent_M_RAD51_Values = 0.5;    %percentage of RAD51 solution which is monomers
 w_RAD51_Values = 1;    %cooperativity parameter for RAD51
 k_on_RAD51_Values = 1;     %kinetic rate constant for RAD51 binding to ssDNA
@@ -41,9 +41,7 @@ Parameter_Name = {'RAD51 Total Concentration (L_R_A_D_5_1)', 'RAD51 Monomer % (\
 RPA_Avg_Saturation = zeros(1,numel(Parameters)/10);
 RAD51_Avg_Saturation = zeros(1,numel(Parameters)/10);
 t_Equilibrium = zeros(1,numel(Parameters)/10);
-Run_Times = zeros(1,numel(Parameters)/10);
-
-prog_bar = waitbar(0,['Simulation 0/', num2str(numel(Parameters)/10), ' (0%)']);    %generates progress bar to count simulations (first step)
+Simulation_Times = zeros(1,numel(Parameters)/10);
 
 % Parameter Values used to avoid over communication to parallel workers
 P1 = Parameters(1,:);
@@ -58,8 +56,7 @@ P9 = Parameters(9,:);
 P10 = Parameters(10,:);
 
 parfor Simulations = 1:(numel(Parameters)/10)
-    tic;    %begins timing for simulation
-    
+    tic
     % Referencing each parameter value for each simulation
     L_RAD51_Total = P1(Simulations);  %Total RAD51 Concentration
     Percent_M_RAD51 = P2(Simulations); %Percentage of RAD51 solution which is monomers
@@ -100,11 +97,6 @@ parfor Simulations = 1:(numel(Parameters)/10)
     while any([Equilibrium_RAD51,Equilibrium_RPA] == 0) == 1 & t(end) <= 25  %runs the whole time that the system is not at equilibrium
         Event_Count = Event_Count+1;    %advances event counter
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        SearchVars1 = {'Gap_Left','Gap_Right','Gap_Size','Gap_Edges','RAD51_M_Available_Gap_Edges','RAD51_D_Available_Gap_Edges','RPA_Available_Gap_Edges','RAD51_Mon_DC','RAD51_Dim_DC','RPA_DC','RAD51_Mon_SC','RAD51_Dim_SC','RPA_SC'};    %variables used in Search Process
-        SearchVars2 = {'Gap_Size_RAD51_M_I','RAD51_M_Available_I_Gap_Edges','Gap_Size_RAD51_D_I','RAD51_D_Available_I_Gap_Edges','Gap_Size_RPA_I','RPA_Available_I_Gap_Edges','RAD51_Filament_Edges','RAD51_Filament_Lengths','RAD51_D_Filament_Locations','RAD51_D_Filament_Lengths','Monomers_per_Dimer_Filament'};    %more search variables
-        clear (SearchVars1{:});   %clear all search variables that would otherwise overlap
-        clear (SearchVars2{:});   %clear all search variables that would otherwise overlap
-
         Gap_Left = find(diff([1 DNA(2,:) 1])<0 & diff([1 DNA(2,:) 1]) ~= RPA_A-RPA_D & diff([1 DNA(2,:) 1]) ~=RPA_D-RAD51 & diff([1 DNA(2,:) 1]) ~= RPA_A-RAD51);    %left most available location of all gaps on lattice
         Gap_Right = find(diff([1 DNA(2,:) 1])>0 & diff([1 DNA(2,:) 1]) ~= RPA_D-RPA_A & diff([1 DNA(2,:) 1]) ~= RAD51-RPA_D & diff([1 DNA(2,:) 1]) ~= RAD51-RPA_A)-1; %right most available location of all gaps on lattice
         Gap_Size = (Gap_Right-Gap_Left)+1;    %calculates the size of each gap
@@ -392,8 +384,8 @@ parfor Simulations = 1:(numel(Parameters)/10)
         t = [t, t(end)+dt];  %advance time according to time interval selected by Gillespie Algorithm
 
         FracCover_RAD51 = [FracCover_RAD51,numel(find(DNA(2,:) == RAD51))/N]; %RAD51 saturation of the DNA lattice after each event
-        FracCover_RPA_A = [FracCover,RPA_A,numel(find(DNA(2,:) == RPA_A))/N];  %saturation of RPA-A
-        FracCover_RPA_D = [FracCover,RPA_D,numel(find(DNA(2,:) == RPA_D))/N];  %saturation of RPA-D on the lattice
+        FracCover_RPA_A = [FracCover_RPA_A,numel(find(DNA(2,:) == RPA_A))/N];  %saturation of RPA-A
+        FracCover_RPA_D = [FracCover_RPA_D,numel(find(DNA(2,:) == RPA_D))/N];  %saturation of RPA-D on the lattice
         FracCover_RPA = [FracCover_RPA,sum([FracCover_RPA_A(Event_Count+1),FracCover_RPA_D(Event_Count+1)])];  %saturation of all parts of RPA
         FracCover_Total = [FracCover_Total,sum([FracCover_RAD51(Event_Count+1),FracCover_RPA(Event_Count+1)])];  %total saturation of the lattice (both RPA and RAD51)
 
@@ -424,10 +416,35 @@ parfor Simulations = 1:(numel(Parameters)/10)
                 Equilibrium_RAD51 = 0;    %...otherwise reset to not at equilibrium
             end
         end
+        %%%%%%% Clear Search Variables %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        Gap_Left = [];
+        Gap_Right = [];
+        Gap_Size = [];
+        RAD51_M_Available_Gap_Edges = [];
+        RAD51_D_Available_Gap_Edges = [];
+        RPA_Available_Gap_Edges = [];
+        RAD51_Mon_DC = [];
+        RAD51_Dim_DC = [];
+        RPA_DC = [];
+        RAD51_Mon_SC = [];
+        RAD51_Dim_SC = [];
+        RPA_SC = [];
+        Gap_Size_RAD51_M = [];
+        Gap_Size_RAD51_D = [];
+        Gap_Size_RPA = [];
+        RAD51_M_Available_I_Gap_Edges = [];
+        RAD51_D_Available_I_Gap_Edges = [];
+        RPA_Available_I_Gap_Edges = [];
+        RAD51_Filament_Edges = [];
+        RAD51_Filament_Lengths = [];
+        RAD51_D_Filament_Locations = [];
+        RAD51_D_Filament_Lengths = [];
+        Monomers_per_Dimer_Filament = [];
     end
 
     t_Equilibrium(Simulations) = t(Event_Count+1-round(0.25*(Event_Count+1)));   %time where equilibrium occured
-    RPA_Avg_Saturation(Simulations) = RAP
+    RPA_Avg_Saturation(Simulations) = RPA_Avg_Saturation_Holder;    %inputs the equilibrium saturations that will then be plotted later on
+    RAD51_Avg_Saturation(Simulations) = RAD51_Avg_Saturation_Holder;
     
 %     figure(Simulations);  %plots of saturation over time
 %     scatter(t,FracCover_RAD51,1,'red','filled');    %RAD51 Saturation
@@ -447,24 +464,33 @@ parfor Simulations = 1:(numel(Parameters)/10)
 %     legend('RAD51','RPA-A','RPA-D','All RPA','Total','location','southoutside','orientation','horizontal');
 %     box on;
 
-    waitbar(Simulations/(numel(Parameters)/10),prog_bar,['Simulation ', num2str(Simulations), '/', num2str(numel(Parameters)/10), ' (', num2str(round(((Simulations)/(numel(Parameters)/10))*100,2)), '%)']); %updates progress bar to show how many simulations have been completed
-    Run_Times(Simulations) = toc;   %stores time it took for simulation to complete
+     Simulation_Times(Simulations) = toc;    %times each simulation
 end
-delete(prog_bar);   %closes progress bar
 
 Changing_Parameter = find(any(diff(Parameters,1,2) ~= 0, 2));  %row in Parameters vector that corresponds to the changing parameter
 
 figure;
+subplot(2,1,1);
 scatter(Parameters(Changing_Parameter,:),RPA_Avg_Saturation,10,'m','filled');  %equilibrium saturation values for RPA
 hold on;
 scatter(Parameters(Changing_Parameter,:),RAD51_Avg_Saturation,10,'r','filled'); %equilibrium saturation values for RAD51
 scatter(Parameters(Changing_Parameter,:),RPA_Avg_Saturation+RAD51_Avg_Saturation,10,'k','filled'); %equilibrium saturation values for total saturation
-xlim([(min(Parameters(Changing_Parameter,:))-0.1*max(Parameters(Changing_Parameter,:))) (max(Parameters(Changing_Parameter,:))+0.1*max(Parameters(Changing_Parameter,:)))]);
 ylim([0 1]);
 xlabel(Parameter_Name(Changing_Parameter));
 ylabel('Equilibrium Saturation');
+title('Saturation of DNA Lattice');
 legend('RPA','RAD51','Total');
 box on;
+subplot(2,1,2);
+scatter(Parameters(Changing_Parameter,:),t_Equilibrium,10,'b','filled');    %equilibrium time for each parameter value
+ylabel('Time, t');
+title('Equilibrium Time');
+box on;
 
-Total_Run_Time = sum(Run_Times);    %total time it took the model to run
-disp(['Total Run Time: ', num2str(round(Total_Run_Time,2))]);
+figure;
+scatter(Parameters(Changing_Parameter,:),Simulation_Times,10,'b','filled'); %plots simulation time based on parameters
+xlabel(Parameters_Name(Changing_Parameter));
+ylabel('Time, t (s)');
+title('Simulation Time');
+
+toc
