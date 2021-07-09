@@ -42,6 +42,7 @@ RPA_Avg_Saturation = zeros(1,numel(Parameters)/10);
 RAD51_Avg_Saturation = zeros(1,numel(Parameters)/10);
 t_Equilibrium = zeros(1,numel(Parameters)/10);
 prog_bar = waitbar(0,['Simulation 0/', num2str(numel(Parameters)/10), ' (0%)']);    %generates progress bar to count simulations (first step)
+Simulation_Times = zeros(1,numel(Parameters)/10);
 
 % Parameter Values used to avoid over communication to parallel workers
 P1 = Parameters(1,:);
@@ -56,6 +57,7 @@ P9 = Parameters(9,:);
 P10 = Parameters(10,:);
 
 parfor Simulations = 1:(numel(Parameters)/10)
+    tic
     % Referencing each parameter value for each simulation
     L_RAD51_Total = P1(Simulations);  %Total RAD51 Concentration
     Percent_M_RAD51 = P2(Simulations); %Percentage of RAD51 solution which is monomers
@@ -464,7 +466,7 @@ parfor Simulations = 1:(numel(Parameters)/10)
 %     box on;
 
     waitbar(Simulations/(numel(Parameters)/10),prog_bar,['Simulation ', num2str(Simulations), '/', num2str(numel(Parameters)/10), ' (', num2str(round(((Simulations)/(numel(Parameters)/10))*100,2)), '%)']); %updates progress bar to show how many simulations have been completed
-    Run_Times(Simulations) = toc;   %stores time it took for simulation to complete
+     Simulation_Times(Simulations) = toc;    %times each simulation
 end
 delete(prog_bar);   %closes progress bar
 
