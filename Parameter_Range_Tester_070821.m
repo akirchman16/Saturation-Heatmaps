@@ -13,7 +13,7 @@ N = 5000;   %length of ssDNA lattice
 RAD51 = 51; %value that will be stored on lattice to represent bound RAD51
 n_RAD51 = 3;    %length of RAD51 protein
 
-L_RAD51_Total_Values = [1,2,0.5];  %total concentration of RAD51 in solution
+L_RAD51_Total_Values = linspace(0.1,10,100);  %total concentration of RAD51 in solution
 Percent_M_RAD51_Values = 0.5;    %percentage of RAD51 solution which is monomers
 w_RAD51_Values = 1;    %cooperativity parameter for RAD51
 k_on_RAD51_Values = 1;     %kinetic rate constant for RAD51 binding to ssDNA
@@ -474,7 +474,6 @@ scatter(Parameters(Changing_Parameter,:),RPA_Avg_Saturation,10,'m','filled');  %
 hold on;
 scatter(Parameters(Changing_Parameter,:),RAD51_Avg_Saturation,10,'r','filled'); %equilibrium saturation values for RAD51
 scatter(Parameters(Changing_Parameter,:),RPA_Avg_Saturation+RAD51_Avg_Saturation,10,'k','filled'); %equilibrium saturation values for total saturation
-xlim([(min(Parameters(Changing_Parameter,:))-0.1*max(Parameters(Changing_Parameter,:))) (max(Parameters(Changing_Parameter,:))+0.1*max(Parameters(Changing_Parameter,:)))]);
 ylim([0 1]);
 xlabel(Parameter_Name(Changing_Parameter));
 ylabel('Equilibrium Saturation');
