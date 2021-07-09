@@ -476,20 +476,20 @@ hold on;
 scatter(Parameters(Changing_Parameter,:),RAD51_Avg_Saturation,10,'r','filled'); %equilibrium saturation values for RAD51
 scatter(Parameters(Changing_Parameter,:),RPA_Avg_Saturation+RAD51_Avg_Saturation,10,'k','filled'); %equilibrium saturation values for total saturation
 ylim([0 1]);
-xlabel(Parameter_Name(Changing_Parameter));
 ylabel('Equilibrium Saturation');
 title('Saturation of DNA Lattice');
 legend('RPA','RAD51','Total');
 box on;
 subplot(2,1,2);
 scatter(Parameters(Changing_Parameter,:),t_Equilibrium,10,'b','filled');    %equilibrium time for each parameter value
+xlabel(Parameter_Name(Changing_Parameter));
 ylabel('Time, t');
 title('Equilibrium Time');
 box on;
 
 figure;
 scatter(Parameters(Changing_Parameter,:),Simulation_Times,10,'b','filled'); %plots simulation time based on parameters
-xlabel(Parameters_Name(Changing_Parameter));
+xlabel(Parameter_Name(Changing_Parameter));
 ylabel('Time, t (s)');
 title('Simulation Time');
 box on;
