@@ -470,7 +470,7 @@ parfor Simulations = 1:(numel(Parameters)/10)
 %     box on;
 
      Simulation_Times(Simulations) = toc;    %times each simulation
-     send(q_Count,Simulations); %sends simulation count to q_Count and updates progress bar
+     send(q_Count,Simulations);
 end
 
 Changing_Parameter = find(any(diff(Parameters,1,2) ~= 0, 2));  %row in Parameters vector that corresponds to the changing parameter
