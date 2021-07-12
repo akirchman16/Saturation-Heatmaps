@@ -14,7 +14,7 @@ RAD51 = 51; %value that will be stored on lattice to represent bound RAD51
 n_RAD51 = 3;    %length of RAD51 protein
 
 L_RAD51_Total_Values = 2;  %total concentration of RAD51 in solution
-Percent_M_RAD51_Values = 0.5;    %percentage of RAD51 solution which is monomers
+Percent_M_RAD51_Values = [0,0.5,1];    %percentage of RAD51 solution which is monomers
 w_RAD51_Values = 1;    %cooperativity parameter for RAD51
 k_on_RAD51_Values = 1;     %kinetic rate constant for RAD51 binding to ssDNA
 k_off_RAD51_Values = 1;    %kinetic rate constant for RAD51 dissociating from ssDNA
@@ -472,6 +472,7 @@ parfor Simulations = 1:(numel(Parameters)/10)
      Simulation_Times(Simulations) = toc;    %times each simulation
      send(q_Count,Simulations); %sends simulation count to q_Count and updates progress bar
 end
+delete(w);  %closes waitbar
 
 Changing_Parameter = find(any(diff(Parameters,1,2) ~= 0, 2));  %row in Parameters vector that corresponds to the changing parameter
 
