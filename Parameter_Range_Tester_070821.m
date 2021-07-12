@@ -28,7 +28,7 @@ n_D = 10;   %length of D component of RPA
 L_RPA_Values = 2;  %concentration of RPA in solution
 w_RPA = 1;  %cooperativity parameter of RPA (for macroscopic binding)
 k_on_RPA_A_Values = 25; %kinetic rate constant for RPA-A binding to ssDNA
-k_on_RPA_D_Values = 15;  %kinetic rate constant for RPA-D binding to ssDNA
+k_on_RPA_D_Values = 1:1:100;  %kinetic rate constant for RPA-D binding to ssDNA
 k_off_RPA_A_Values = 1; %kinetic rate constant for RPA-A dissociating from ssDNA
 k_off_RPA_D_Values = 1; %kinetic rate constant for RPA-D dissociating from ssDNA
 
