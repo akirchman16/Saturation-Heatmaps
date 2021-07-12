@@ -13,7 +13,7 @@ N = 5000;   %length of ssDNA lattice
 RAD51 = 51; %value that will be stored on lattice to represent bound RAD51
 n_RAD51 = 3;    %length of RAD51 protein
 
-L_RAD51_Total_Values = linspace(0.1,1,10);  %total concentration of RAD51 in solution
+L_RAD51_Total_Values = 2;  %total concentration of RAD51 in solution
 Percent_M_RAD51_Values = 0.5;    %percentage of RAD51 solution which is monomers
 w_RAD51_Values = 1;    %cooperativity parameter for RAD51
 k_on_RAD51_Values = 1;     %kinetic rate constant for RAD51 binding to ssDNA
@@ -25,7 +25,7 @@ RPA_D = 3;  %value to represent D piece of RPA on lattice
 n_A = 10;   %length of A component of RPA
 n_D = 10;   %length of D component of RPA
 
-L_RPA_Values = 2;  %concentration of RPA in solution
+L_RPA_Values = 0.1:0.1:15;  %concentration of RPA in solution
 w_RPA = 1;  %cooperativity parameter of RPA (for macroscopic binding)
 k_on_RPA_A_Values = 25; %kinetic rate constant for RPA-A binding to ssDNA
 k_on_RPA_D_Values = 15;  %kinetic rate constant for RPA-D binding to ssDNA
@@ -94,7 +94,7 @@ parfor Simulations = 1:(numel(Parameters)/10)
     Event_Count = 0;    %counts how many events happen within the simulation
     Equilibrium_RAD51 = 0;  %test of whether RAD51 saturation is at equilibrium (1 = at equilibrium)
     Equilibrium_RPA = 0;    %test of whether RPA saturation is at equilibrium (1 = at equilibirium)
-    while any([Equilibrium_RAD51,Equilibrium_RPA] == 0) == 1 & t(end) <= 25  %runs the whole time that the system is not at equilibrium
+    while any([Equilibrium_RAD51,Equilibrium_RPA] == 0) & t(end) <= 25  %runs the whole time that the system is not at equilibrium
         Event_Count = Event_Count+1;    %advances event counter
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         Gap_Left = find(diff([1 DNA(2,:) 1])<0 & diff([1 DNA(2,:) 1]) ~= RPA_A-RPA_D & diff([1 DNA(2,:) 1]) ~=RPA_D-RAD51 & diff([1 DNA(2,:) 1]) ~= RPA_A-RAD51);    %left most available location of all gaps on lattice
