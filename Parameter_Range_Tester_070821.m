@@ -13,8 +13,8 @@ N = 5000;   %length of ssDNA lattice
 RAD51 = 51; %value that will be stored on lattice to represent bound RAD51
 n_RAD51 = 3;    %length of RAD51 protein
 
-L_RAD51_Total_Values = linspace(0.1,1,10);  %total concentration of RAD51 in solution
-Percent_M_RAD51_Values = 0.5;    %percentage of RAD51 solution which is monomers
+L_RAD51_Total_Values = 2;  %total concentration of RAD51 in solution
+Percent_M_RAD51_Values = [0,0.5,1];    %percentage of RAD51 solution which is monomers
 w_RAD51_Values = 1;    %cooperativity parameter for RAD51
 k_on_RAD51_Values = 1;     %kinetic rate constant for RAD51 binding to ssDNA
 k_off_RAD51_Values = 1;    %kinetic rate constant for RAD51 dissociating from ssDNA
@@ -54,6 +54,11 @@ P7 = Parameters(7,:);
 P8 = Parameters(8,:);
 P9 = Parameters(9,:);
 P10 = Parameters(10,:);
+
+w = waitbar(0, ['Running ', num2str(numel(Parameters)/10), ' Simulations...']);
+q_Count = parallel.pool.DataQueue;    %data queue to count how many simulations are complete
+afterEach(q_Count,@parforWaitbar);
+parforWaitbar(w, numel(Parameters)/10);
 
 parfor Simulations = 1:(numel(Parameters)/10)
     tic
@@ -464,8 +469,10 @@ parfor Simulations = 1:(numel(Parameters)/10)
 %     legend('RAD51','RPA-A','RPA-D','All RPA','Total','location','southoutside','orientation','horizontal');
 %     box on;
 
-     Simulation_Times(Simulations) = toc;    %times each simulation
+    Simulation_Times(Simulations) = toc;    %times each simulation
+    send(q_Count,Simulations);  %sends simulation count to q_Count data queue
 end
+delete(w);  %closes waitbar
 
 Changing_Parameter = find(any(diff(Parameters,1,2) ~= 0, 2));  %row in Parameters vector that corresponds to the changing parameter
 
