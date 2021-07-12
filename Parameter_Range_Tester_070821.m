@@ -25,7 +25,7 @@ RPA_D = 3;  %value to represent D piece of RPA on lattice
 n_A = 10;   %length of A component of RPA
 n_D = 10;   %length of D component of RPA
 
-L_RPA_Values = 2;  %concentration of RPA in solution
+L_RPA_Values = 0.1:0.1:15;  %concentration of RPA in solution
 w_RPA = 1;  %cooperativity parameter of RPA (for macroscopic binding)
 k_on_RPA_A_Values = 25; %kinetic rate constant for RPA-A binding to ssDNA
 k_on_RPA_D_Values = 15;  %kinetic rate constant for RPA-D binding to ssDNA
@@ -55,10 +55,10 @@ P8 = Parameters(8,:);
 P9 = Parameters(9,:);
 P10 = Parameters(10,:);
 
-w = waitbar(0, ['Running ', num2str(numel(Parameters)/10), ' Simulations...']);
-q_Count = parallel.pool.DataQueue;    %data queue to count how many simulations are complete
-afterEach(q_Count,@parforWaitbar);
-parforWaitbar(w, numel(Parameters)/10);
+w = waitbar(0,['Running ', num2str(numel(Parameters)/10), ' Simulations...']);  %generates a progress bar for the simulations
+q_Count = parallel.pool.DataQueue;  %data queue to count how many simulations are completed
+afterEach(q_Count,@parforWaitbar);  %runs parforWaitbar function at conclusion of each iteration (updates progress bar)
+parforWaitbar(w, numel(Parameters)/10); %defines inputs for parforWaitbar function
 
 parfor Simulations = 1:(numel(Parameters)/10)
     tic
@@ -99,7 +99,7 @@ parfor Simulations = 1:(numel(Parameters)/10)
     Event_Count = 0;    %counts how many events happen within the simulation
     Equilibrium_RAD51 = 0;  %test of whether RAD51 saturation is at equilibrium (1 = at equilibrium)
     Equilibrium_RPA = 0;    %test of whether RPA saturation is at equilibrium (1 = at equilibirium)
-    while any([Equilibrium_RAD51,Equilibrium_RPA] == 0) == 1 & t(end) <= 25  %runs the whole time that the system is not at equilibrium
+    while any([Equilibrium_RAD51,Equilibrium_RPA] == 0) & t(end) <= 25  %runs the whole time that the system is not at equilibrium
         Event_Count = Event_Count+1;    %advances event counter
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         Gap_Left = find(diff([1 DNA(2,:) 1])<0 & diff([1 DNA(2,:) 1]) ~= RPA_A-RPA_D & diff([1 DNA(2,:) 1]) ~=RPA_D-RAD51 & diff([1 DNA(2,:) 1]) ~= RPA_A-RAD51);    %left most available location of all gaps on lattice
@@ -469,8 +469,8 @@ parfor Simulations = 1:(numel(Parameters)/10)
 %     legend('RAD51','RPA-A','RPA-D','All RPA','Total','location','southoutside','orientation','horizontal');
 %     box on;
 
-    Simulation_Times(Simulations) = toc;    %times each simulation
-    send(q_Count,Simulations);  %sends simulation count to q_Count data queue
+     Simulation_Times(Simulations) = toc;    %times each simulation
+     send(q_Count,Simulations); %sends simulation count to q_Count and updates progress bar
 end
 delete(w);  %closes waitbar
 
