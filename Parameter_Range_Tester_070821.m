@@ -13,7 +13,8 @@ N = 5000;   %length of ssDNA lattice
 RAD51 = 51; %value that will be stored on lattice to represent bound RAD51
 n_RAD51 = 3;    %length of RAD51 protein
 
-L_RAD51_Total_Values = linspace(0.1,1,10);  %total concentration of RAD51 in solution
+
+L_RAD51_Total_Values = 2;  %total concentration of RAD51 in solution
 Percent_M_RAD51_Values = 0.5;    %percentage of RAD51 solution which is monomers
 w_RAD51_Values = 1;    %cooperativity parameter for RAD51
 k_on_RAD51_Values = 1;     %kinetic rate constant for RAD51 binding to ssDNA
@@ -28,7 +29,7 @@ n_D = 10;   %length of D component of RPA
 L_RPA_Values = 2;  %concentration of RPA in solution
 w_RPA = 1;  %cooperativity parameter of RPA (for macroscopic binding)
 k_on_RPA_A_Values = 25; %kinetic rate constant for RPA-A binding to ssDNA
-k_on_RPA_D_Values = 15;  %kinetic rate constant for RPA-D binding to ssDNA
+k_on_RPA_D_Values = 1:1:100;  %kinetic rate constant for RPA-D binding to ssDNA
 k_off_RPA_A_Values = 1; %kinetic rate constant for RPA-A dissociating from ssDNA
 k_off_RPA_D_Values = 1; %kinetic rate constant for RPA-D dissociating from ssDNA
 
@@ -42,6 +43,13 @@ RPA_Avg_Saturation = zeros(1,numel(Parameters)/10);
 RAD51_Avg_Saturation = zeros(1,numel(Parameters)/10);
 t_Equilibrium = zeros(1,numel(Parameters)/10);
 Simulation_Times = zeros(1,numel(Parameters)/10);
+% Allocation of cell arrays for data that will produce growth profiles
+time_Data = cell(numel(Parameters)/10,1);
+FracCover_RAD51_Data = cell(numel(Parameters)/10,1);
+FracCover_RPA_A_Data = cell(numel(Parameters)/10,1);
+FracCover_RPA_D_Data = cell(numel(Parameters)/10,1);
+FracCover_RPA_Data = cell(numel(Parameters)/10,1);
+FracCover_Total_Data = cell(numel(Parameters)/10,1);
 
 % Parameter Values used to avoid over communication to parallel workers
 P1 = Parameters(1,:);
@@ -54,6 +62,11 @@ P7 = Parameters(7,:);
 P8 = Parameters(8,:);
 P9 = Parameters(9,:);
 P10 = Parameters(10,:);
+
+w = waitbar(0,['Running ', num2str(numel(Parameters)/10), ' Simulations...']);  %generates a progress bar for the simulations
+q_Count = parallel.pool.DataQueue;  %data queue to count how many simulations are completed
+afterEach(q_Count,@parforWaitbar);  %runs parforWaitbar function at conclusion of each iteration (updates progress bar)
+parforWaitbar(w, numel(Parameters)/10); %defines inputs for parforWaitbar function
 
 parfor Simulations = 1:(numel(Parameters)/10)
     tic
@@ -94,7 +107,7 @@ parfor Simulations = 1:(numel(Parameters)/10)
     Event_Count = 0;    %counts how many events happen within the simulation
     Equilibrium_RAD51 = 0;  %test of whether RAD51 saturation is at equilibrium (1 = at equilibrium)
     Equilibrium_RPA = 0;    %test of whether RPA saturation is at equilibrium (1 = at equilibirium)
-    while any([Equilibrium_RAD51,Equilibrium_RPA] == 0) == 1 & t(end) <= 25  %runs the whole time that the system is not at equilibrium
+    while any([Equilibrium_RAD51,Equilibrium_RPA] == 0) & t(end) <= 25  %runs the whole time that the system is not at equilibrium
         Event_Count = Event_Count+1;    %advances event counter
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         Gap_Left = find(diff([1 DNA(2,:) 1])<0 & diff([1 DNA(2,:) 1]) ~= RPA_A-RPA_D & diff([1 DNA(2,:) 1]) ~=RPA_D-RAD51 & diff([1 DNA(2,:) 1]) ~= RPA_A-RAD51);    %left most available location of all gaps on lattice
@@ -443,29 +456,20 @@ parfor Simulations = 1:(numel(Parameters)/10)
     end
 
     t_Equilibrium(Simulations) = t(Event_Count+1-round(0.25*(Event_Count+1)));   %time where equilibrium occured
-    RPA_Avg_Saturation(Simulations) = RPA_Avg_Saturation_Holder;    %inputs the equilibrium saturations that will then be plotted later on
-    RAD51_Avg_Saturation(Simulations) = RAD51_Avg_Saturation_Holder;
-    
-%     figure(Simulations);  %plots of saturation over time
-%     scatter(t,FracCover_RAD51,1,'red','filled');    %RAD51 Saturation
-%     hold on;
-%     scatter(t,FracCover_RPA_A,1,'cyan','filled');   %RPA-A Saturation
-%     scatter(t,FracCover_RPA_D,1,'blue','filled');   %RPA-D Saturation
-%     scatter(t,FracCover_RPA,1,'magenta','filled');  %RPA Saturation
-%     scatter(t,FracCover_Total,1,'black','filled');  %total protein saturation
-%     xline(t_Equilibrium(Simulations), '--k',['t: ', num2str(round(t_Equilibrium(Simulations),2))],'LabelHorizontalAlignment','left');
-%     yline(RPA_Avg_Saturation(Simulations),'--k',['RPA: ', num2str(round(RPA_Avg_Saturation(Simulations),2))],'LabelHorizontalAlignment','left');
-%     yline(RAD51_Avg_Saturation(Simulations),'--k',['RAD51: ', num2str(round(RAD51_Avg_Saturation(Simulations),2))],'LabelHorizontalAlignment','left');
-%     xlabel('Time, t');
-%     xlim([0 max(t)]);
-%     ylabel('Saturation');
-%     ylim([0 1]);
-%     title('RAD51/RPA Competition Saturation');
-%     legend('RAD51','RPA-A','RPA-D','All RPA','Total','location','southoutside','orientation','horizontal');
-%     box on;
+	RPA_Avg_Saturation(Simulations) = RPA_Avg_Saturation_Holder;	%inputs the equilibrium saturations that will then be plotted later on
+    RAD51_Avg_Saturation(Simulations) = RAD51_Avg_Saturation_Holder;    %records the equilibrium saturation for RAD51 for this simulation
+%     Record data for growth profiles
+    time_Data{Simulations} = t;   %records time data for each simulation
+    FracCover_RAD51_Data{Simulations} = FracCover_RAD51;    %records RAD51 saturation throughout each simulation
+    FracCover_RPA_A_Data{Simulations} = FracCover_RPA_A;    %records RPA-A saturation throughout each simulation
+    FracCover_RPA_D_Data{Simulations} = FracCover_RPA_D;    %reocrds RPA-D saturation throughout each simulation
+    FracCover_RPA_Data{Simulations} = FracCover_RPA;    %records total RPA saturation throughout each simulation
+    FracCover_Total_Data{Simulations} = FracCover_Total;    %records the total saturation throughout each simulation
 
-     Simulation_Times(Simulations) = toc;    %times each simulation
+    Simulation_Times(Simulations) = toc;    %times each simulation
+    send(q_Count,Simulations); %sends simulation count to q_Count and updates progress bar
 end
+delete(w);  %closes waitbar
 
 Changing_Parameter = find(any(diff(Parameters,1,2) ~= 0, 2));  %row in Parameters vector that corresponds to the changing parameter
 
@@ -487,11 +491,11 @@ ylabel('Time, t');
 title('Equilibrium Time');
 box on;
 
-figure;
-scatter(Parameters(Changing_Parameter,:),Simulation_Times,10,'b','filled'); %plots simulation time based on parameters
-xlabel(Parameter_Name(Changing_Parameter));
-ylabel('Time, t (s)');
-title('Simulation Time');
-box on;
+% figure;
+% scatter(Parameters(Changing_Parameter,:),Simulation_Times,10,'b','filled'); %plots simulation time based on parameters
+% xlabel(Parameter_Name(Changing_Parameter));
+% ylabel('Time, t (s)');
+% title('Simulation Time');
+% box on;
 
 toc
