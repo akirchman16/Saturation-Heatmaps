@@ -433,7 +433,7 @@ parfor Simulations = 1:(numel(Heatmap_Parameters)/2)
         RAD51_D_Filament_Locations = [];
         RAD51_D_Filament_Lengths = [];
         Monomers_per_Dimer_Filament = [];    
-    end
+    end         %end of a single simulation
     
     RPA_Avg_Saturation(Simulations) = RPA_Avg_Saturation_Holder;    %records equilibrium avg. RPA saturation
     RAD51_Avg_Saturation(Simulations) = RAD51_Avg_Saturation_Holder;    %records equilibrium avg. RAD51 saturation
