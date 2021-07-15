@@ -39,6 +39,7 @@ Heatmap_Parameters = combvec(k_on_RAD51_Values,k_off_RAD51_Values);   %combinati
 % Memory Allocation
 RPA_Avg_Saturation = zeros(1,numel(Heatmap_Parameters)/2);
 RAD51_Avg_Saturation = zeros(1,numel(Heatmap_Parameters)/2);
+Total_Avg_Saturation = zeros(1,numel(Heatmap_Parameters)/2);
 t_Equilibrium = zeros(1,numel(Heatmap_Parameters)/2);
 Simulation_Times = zeros(1,numel(Heatmap_Parameters)/2);
 % Allocation of cell arrays for data that will produce growth profiles
@@ -437,6 +438,7 @@ parfor Simulations = 1:(numel(Heatmap_Parameters)/2)
     
     RPA_Avg_Saturation(Simulations) = RPA_Avg_Saturation_Holder;    %records equilibrium avg. RPA saturation
     RAD51_Avg_Saturation(Simulations) = RAD51_Avg_Saturation_Holder;    %records equilibrium avg. RAD51 saturation
+    Total_Avg_Saturation(Simulations) = sum(FracCover_Total(end-round(0.25*Event_Count):end))/numel(FracCover_Total(end-round(0.25*Event_Count):end));  %records equilibrium avg. for the whole DNA molecule
     t_Equilibrium(Simulations) = t(end-round(0.25*(Event_Count+1)));   %time where equilibrium occured
 
 %     Record data for growth profiles
@@ -457,6 +459,8 @@ Z_Heatmap_RAD51 = griddata(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),RAD51
 Z_Heatmap_RAD51 = reshape(Z_Heatmap_RAD51,size(X_Heatmap)); %reshapes RAD51 saturation data into appropriately sized matrix
 Z_Heatmap_RPA = griddata(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),RPA_Avg_Saturation,X_Heatmap(:),Y_Heatmap(:));  %generates heatmap data based on RPA saturation
 Z_Heatmap_RPA = reshape(Z_Heatmap_RPA,size(X_Heatmap)); %reshapes RPA saturation data into appropriately sized matrix
+Z_Heatmap_Total = griddata(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Total_Avg_Saturation,X_Heatmap(:),Y_Heatmap(:));  %generates heatmap data based on the total saturation (sum of RPA and RAD51)
+Z_Heatmap_Total = reshape(Z_Heatmap_Total,size(X_Heatmap)); %reshapes Total saturation data into appropriately sized matrix
 Z_Heatmap_t = griddata(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),t_Equilibrium,X_Heatmap(:),Y_Heatmap(:));    %generates heatmap data based on the time to equilibrium
 Z_Heatmap_t = reshape(Z_Heatmap_t,size(X_Heatmap)); %reshapes time to equilibrium data into the appropriately sized matrix
 
@@ -466,7 +470,7 @@ imagesc(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Z_Heatmap_RAD51);
 title('RAD51 Saturation');
 xlabel('RAD51 k_o_n');
 ylabel('RAD51 k_o_f_f');
-colorbar on;
+colorbar;
 box on;
 subplot(2,2,2); %RPA Saturation Heatmap
 imagesc(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Z_Heatmap_RPA);
@@ -475,7 +479,14 @@ xlabel('RAD51 k_o_n');
 ylabel('RAD51 k_o_f_f');
 colorbar;
 box on;
-subplot(2,2,3); %Time to Equilibrium Heatmap
+subplot(2,2,3); %Total Saturation Heatmap
+imagesc(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Z_Heatmap_Total);
+title('Total Saturation');
+xlabel('RAD51 k_o_n');
+ylabel('RAD51 k_o_f_f');
+colorbar;
+box on;
+subplot(2,2,4); %Time to Equilibrium Heatmap
 imagesc(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Z_Heatmap_t);
 title('Time to Equilibrium');
 xlabel('RAD51 k_o_n');
