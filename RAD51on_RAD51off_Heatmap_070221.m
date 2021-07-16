@@ -59,7 +59,7 @@ afterEach(q_Count,@parforWaitbar);  %runs parforWaitbar function at conclusion o
 parforWaitbar(w, numel(Heatmap_Parameters)/2); %defines inputs for parforWaitbar function
 
 parfor Simulations = 1:(numel(Heatmap_Parameters)/2)
-%     tic
+    tic
     % Referencing each parameter value for each simulation
     k_on_RAD51 = P1(Simulations); %Kinetic rate constant for RAD51 binding
     k_off_RAD51 = P2(Simulations);    %Kinetic rate constant for RAD51 unbinding
