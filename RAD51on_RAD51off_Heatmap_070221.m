@@ -43,7 +43,7 @@ Total_Avg_Saturation = zeros(1,numel(Heatmap_Parameters)/2);
 t_Equilibrium = zeros(1,numel(Heatmap_Parameters)/2);
 Simulation_Times = zeros(1,numel(Heatmap_Parameters)/2);
 % Allocation of cell arrays for data that will produce growth profiles
-time_Data = cell(numel(Heatmap_Parameters)/10,1);
+time_Data = cell(numel(Heatmap_Parameters)/2,1);
 FracCover_RAD51_Data = cell(numel(Heatmap_Parameters)/2,1);
 FracCover_RPA_A_Data = cell(numel(Heatmap_Parameters)/2,1);
 FracCover_RPA_D_Data = cell(numel(Heatmap_Parameters)/2,1);
