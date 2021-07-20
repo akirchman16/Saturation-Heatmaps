@@ -2,7 +2,7 @@ clearvars
 close all;
 
 % Generates a heatmap figure for variations of the two parameters
-% L_RAD51_Total and Percent_M_RAD51. It allows for plotting the growth 
+% L_RAD51_Total and w_RAD51. It allows for plotting the growth 
 % profile of each simulation but also the heatmaps. Heatmaps generated 
 % include RAD51 saturation, RPA saturation, and time to equilibrium.
 
