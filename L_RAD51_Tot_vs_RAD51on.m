@@ -62,7 +62,7 @@ parfor Simulations = 1:(numel(Heatmap_Parameters)/2)
     tic
     % Referencing each parameter value for each simulation
     L_RAD51_Total = P1(Simulations); %total concentration of RAD51
-    k_on_RAD51 = P2(Simulations);    %percentage of RAD51 solution which is monomers
+    k_on_RAD51 = P2(Simulations);    %k_on RAD51 value
     
     L_RAD51_M = L_RAD51_Total*Percent_M_RAD51;  %calculates concentration of RAD51 monomers
     L_RAD51_D = L_RAD51_Total-L_RAD51_M;    %calculates concentration of RAD51 dimers
