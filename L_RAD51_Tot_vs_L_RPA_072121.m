@@ -468,29 +468,29 @@ figure;
 subplot(2,2,1); %RAD51 Saturation Heatmap
 imagesc(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Z_Heatmap_RAD51);
 title('RAD51 Saturation');
-xlabel('RAD51 Total Concentration');
-ylabel('RPA Concentration');
+xlabel('L_R_A_D_5_1 (Total)');
+ylabel('L_R_P_A');
 colorbar;
 box on;
 subplot(2,2,2); %RPA Saturation Heatmap
 imagesc(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Z_Heatmap_RPA);
 title('RPA Saturation');
-xlabel('RAD51 Total Concentration');
-ylabel('RPA Concentration');
+xlabel('L_R_A_D_5_1 (Total)');
+ylabel('L_R_P_A');
 colorbar;
 box on;
 subplot(2,2,3); %Total Saturation Heatmap
 imagesc(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Z_Heatmap_Total);
 title('Total Saturation');
-xlabel('RAD51 Total Concentration');
-ylabel('RPA Concentration');
+xlabel('L_R_A_D_5_1 (Total)');
+ylabel('L_R_P_A');
 colorbar;
 box on;
 subplot(2,2,4); %Time to Equilibrium Heatmap
 imagesc(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Z_Heatmap_t);
 title('Time to Equilibrium');
-xlabel('RAD51 Total Concentration');
-ylabel('RPA Concentration');
+xlabel('L_R_A_D_5_1 (Total)');
+ylabel('L_R_P_A');
 colorbar;
 box on;
 
