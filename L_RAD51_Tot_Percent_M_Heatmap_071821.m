@@ -34,7 +34,7 @@ k_off_RPA_D = 1; %kinetic rate constant for RPA-D dissociating from ssDNA
 
 n_RPA = sum([n_A,n_D]);   %calculates total length of RPA molecule
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Heatmap_Parameters = combvec(L_RAD51_Total_Values,Percent_M_RAD51_Values);   %combination of possible sets of parameters that will generate heatmap (for this instance: k_on_RAD51 and k_off_RAD51)
+Heatmap_Parameters = combvec(L_RAD51_Total_Values,Percent_M_RAD51_Values);   %combination of possible sets of parameters that will generate heatmap (for this instance: L_RAD51_Total and Percent_M_RAD51)
 
 % Memory Allocation
 RPA_Avg_Saturation = zeros(1,numel(Heatmap_Parameters)/2);
