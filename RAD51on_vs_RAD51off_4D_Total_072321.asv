@@ -505,7 +505,7 @@ imagesc(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Z_Heatmap_RAD51);
 title('RAD51 Saturation');
 xlabel('RAD51 k_o_n');
 ylabel('RAD51 k_o_f_f');
-RAD51_Bar = colorbar('Ticks',0:0.2:1);
+RAD51_Bar = colorbar('Ticks',0:0.2:1]);
 RAD51_Bar.Limits = [0 1];
 box on;
 subplot(2,2,2); %RPA Saturation Heatmap
@@ -513,23 +513,22 @@ imagesc(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Z_Heatmap_RPA);
 title('RPA Saturation');
 xlabel('RAD51 k_o_n');
 ylabel('RAD51 k_o_f_f');
-RPA_Bar = colorbar('Ticks',0:0.2:1);
-RPA_Bar.Limits = [0 1];
+RPA_Bar = colorbar;
+RPA_Bar.Limits = [0 1]
 box on;
 subplot(2,2,3); %Total Saturation Heatmap
 imagesc(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Z_Heatmap_Total);
 title('Total Saturation');
 xlabel('RAD51 k_o_n');
 ylabel('RAD51 k_o_f_f');
-Total_Bar = colorbar('Ticks',0:0.2:1);
-Total_Bar.Limits = [0 1];
+colorbar;
 box on;
 subplot(2,2,4); %Time to Equilibrium Heatmap
 imagesc(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Z_Heatmap_t);
 title('Time to Equilibrium');
 xlabel('RAD51 k_o_n');
 ylabel('RAD51 k_o_f_f');
-Time_Bar = colorbar;
+colorbar;
 box on;
 
 toc
