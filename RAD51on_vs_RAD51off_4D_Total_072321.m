@@ -20,8 +20,8 @@ n_RAD51 = 3;    %length of RAD51 protein
 L_RAD51_Total = 2;  %total concentration of RAD51 in solution
 Percent_M_RAD51 = 1;    %percentage of RAD51 solution which is monomers
 w_RAD51 = 1;    %cooperativity parameter for RAD51
-k_on_RAD51_Values = [1:5];     %kinetic rate constant for RAD51 binding to ssDNA
-k_off_RAD51_Values = [1:5];    %kinetic rate constant for RAD51 dissociating from ssDNA
+k_on_RAD51_Values = [1:4];     %kinetic rate constant for RAD51 binding to ssDNA
+k_off_RAD51_Values = [1:4];    %kinetic rate constant for RAD51 dissociating from ssDNA
 
 % RPA Parameters
 RPA_A = 1;  %value to represent A piece of RPA on lattice
@@ -506,7 +506,6 @@ title('RAD51 Saturation');
 xlabel('RAD51 k_o_n');
 ylabel('RAD51 k_o_f_f');
 RAD51_Bar = colorbar('Ticks',0:0.2:1);
-RAD51_Bar.Limits = [0 1];
 box on;
 subplot(2,2,2); %RPA Saturation Heatmap
 imagesc(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Z_Heatmap_RPA);
@@ -514,7 +513,6 @@ title('RPA Saturation');
 xlabel('RAD51 k_o_n');
 ylabel('RAD51 k_o_f_f');
 RPA_Bar = colorbar('Ticks',0:0.2:1);
-RPA_Bar.Limits = [0 1];
 box on;
 subplot(2,2,3); %Total Saturation Heatmap
 imagesc(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Z_Heatmap_Total);
@@ -522,7 +520,6 @@ title('Total Saturation');
 xlabel('RAD51 k_o_n');
 ylabel('RAD51 k_o_f_f');
 Total_Bar = colorbar('Ticks',0:0.2:1);
-Total_Bar.Limits = [0 1];
 box on;
 subplot(2,2,4); %Time to Equilibrium Heatmap
 imagesc(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Z_Heatmap_t);
