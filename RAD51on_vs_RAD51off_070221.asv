@@ -97,7 +97,7 @@ parfor Simulations = 1:(numel(Heatmap_Parameters)/2)
         RAD51_Dim_BoundAtSpot(Left_RAD51_Dimer_Filament) = 1;
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         Macro_Propensity = [k_on_RAD51*L_RAD51_M,k_on_RAD51*L_RAD51_M*w_RAD51,k_on_RAD51*L_RAD51_M*(w_RAD51^2),k_on_RAD51*L_RAD51_D,k_on_RAD51*L_RAD51_D*w_RAD51,k_on_RAD51*L_RAD51_D*(w_RAD51^2),k_on_RPA_A*L_RPA,k_on_RPA_A*L_RPA*w_RPA,k_on_RPA_A*(w_RPA^2)].*Available_Counts;  %propensity functions for macroscopic reactions
-        Unbinding_Propensity = [k_off_RAD51,k_off_RAD51,k_off_RPA_A,k_off_RPA_D].*Bound_Counts;   %propensity functions of unbinding reactions
+        Unbinding_Propensity = [k_off_RAD51*x_Bound_RAD51_M,k_off_RAD51*x_Bound_RAD51_D,k_off_RPA_A*x_Bound_RPA_A,k_off_RPA_D*x_Bound_RPA_D];   %propensity functions of unbinding reactions
                     % 1 - RAD51 Monomer Unbinding
                     % 2 - RAD51 Dimer Unbinding
                     % 3 - RPA Macroscopically Dissociating
