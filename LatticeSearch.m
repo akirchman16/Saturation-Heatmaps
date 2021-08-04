@@ -3,6 +3,30 @@ function [Available_Counts,Bound_Counts,RAD51_Mon_SC,RAD51_Dim_SC,RAD51_Mon_I,RA
 %available and bount proteins. Runs with each Event in a simulation. Main
 %use is so that it can be adjusted and applied to all codes (via GitHub)
 %simultaneously and easily. Copy/Paste of what the code was in the script.
+    % Clearing Variables %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    Gap_Left = [];
+    Gap_Right = [];
+    Gap_Size = [];
+    RAD51_M_Available_Gap_Edges = [];
+    RAD51_D_Available_Gap_Edges = [];
+    RPA_Available_Gap_Edges = [];
+    RAD51_Mon_DC = [];
+    RAD51_Dim_DC = [];
+    RPA_DC = [];
+    RAD51_Mon_SC = [];
+    RAD51_Dim_SC = [];
+    RPA_SC = [];
+    Gap_Size_RAD51_M = [];
+    Gap_Size_RAD51_D = [];
+    Gap_Size_RPA = [];
+    RAD51_M_Available_I_Gap_Edges = [];
+    RAD51_D_Available_I_Gap_Edges = [];
+    RPA_Available_I_Gap_Edges = [];
+    RAD51_Filament_Edges = [];
+    RAD51_Filament_Lengths = [];
+    RAD51_D_Filament_Locations = [];
+    RAD51_D_Filament_Lengths = [];
+    Monomers_per_Dimer_Filament = [];
 
     Gap_Left = find(diff([1 DNA(2,:) 1])<0 & diff([1 DNA(2,:) 1]) ~= RPA_A-RPA_D & diff([1 DNA(2,:) 1]) ~=RPA_D-RAD51 & diff([1 DNA(2,:) 1]) ~= RPA_A-RAD51);    %left most available location of all gaps on lattice
     Gap_Right = find(diff([1 DNA(2,:) 1])>0 & diff([1 DNA(2,:) 1]) ~= RPA_D-RPA_A & diff([1 DNA(2,:) 1]) ~= RAD51-RPA_D & diff([1 DNA(2,:) 1]) ~= RAD51-RPA_A)-1; %right most available location of all gaps on lattice
