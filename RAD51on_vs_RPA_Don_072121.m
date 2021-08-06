@@ -305,7 +305,9 @@ parfor Simulations = 1:(numel(Heatmap_Parameters)/2)
 end
 delete(w);  %closes waitbar
 
-[X_Heatmap,Y_Heatmap] = meshgrid(k_on_RAD51_Values,k_on_RPA_D_Values); %generates X and Y values for heatmaps
+Shade = RAD51_Avg_Saturation./Total_Avg_Saturation; %percentage of saturation which is due to RAD51
+
+[X_Heatmap,Y_Heatmap] = meshgrid(k_on_RAD51_Values,k_off_RAD51_Values); %generates X and Y values for heatmaps
 Z_Heatmap_RAD51 = griddata(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),RAD51_Avg_Saturation,X_Heatmap(:),Y_Heatmap(:));  %generates heatmap data based on RAD51 saturation
 Z_Heatmap_RAD51 = reshape(Z_Heatmap_RAD51,size(X_Heatmap)); %reshapes RAD51 saturation data into appropriately sized matrix
 Z_Heatmap_RPA = griddata(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),RPA_Avg_Saturation,X_Heatmap(:),Y_Heatmap(:));  %generates heatmap data based on RPA saturation
@@ -315,7 +317,36 @@ Z_Heatmap_Total = reshape(Z_Heatmap_Total,size(X_Heatmap)); %reshapes Total satu
 Z_Heatmap_t = griddata(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),t_Equilibrium,X_Heatmap(:),Y_Heatmap(:));    %generates heatmap data based on the time to equilibrium
 Z_Heatmap_t = reshape(Z_Heatmap_t,size(X_Heatmap)); %reshapes time to equilibrium data into the appropriately sized matrix
 
-figure;
+Z_Heatmap_Shade = griddata(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Shade,X_Heatmap(:),Y_Heatmap(:));    %generates heatmap data based on amount of saturation due to RAD51
+Z_Heatmap_Shade = reshape(Z_Heatmap_Shade,size(X_Heatmap)); %reshapes Z_Heatmap_Shade
+
+% Generates colormap for shaded total saturation data
+MidValue = 0.5; %value to center colorscale at
+MaxColor = [1 0 0]; %maximum color (all RAD51 - red)
+MinColor = [0 0 1]; %minimum color (all RPA - blue)
+MidColor = [1 1 1]; %middle color (even split - white)
+
+mindata = min(min(Z_Heatmap_Shade));
+maxdata = max(max(Z_Heatmap_Shade));
+index = numel(Z_Heatmap_Shade)*abs(MidValue-mindata)./(maxdata-mindata);
+CustomMapTop = [linspace(MinColor(1),MidColor(1),100*index)',linspace(MinColor(2),MidColor(2),100*index)',linspace(MinColor(3),MidColor(3),100*index)'];
+CustomMapBot = [linspace(MidColor(1),MaxColor(1),100*(numel(Z_Heatmap_Shade)-index))',linspace(MidColor(2),MaxColor(2),100*(numel(Z_Heatmap_Shade)-index))',linspace(MidColor(3),MaxColor(3),100*(numel(Z_Heatmap_Shade)-index))'];
+CustMap = [CustomMapTop;CustomMapBot];
+
+colormap(figure(1),CustMap);    %colormap for the shaded plot
+
+figure(1);
+surf(X_Heatmap,Y_Heatmap,Z_Heatmap_Total,Z_Heatmap_Shade);
+title('DNA Lattice Saturation');
+xlabel('RAD51 k_o_n');
+ylabel('RPA-D k_o_n');
+zlabel('Total Saturation');
+ShadeBar = colorbar('Ticks',[0,0.5,1],'TickLabels',{'All RPA','Even','All RAD51'});
+ShadeBar.Limits = [0 1];
+
+colormap(figure(2),parula); %colormap for original heatmaps
+
+figure(2);
 subplot(2,2,1); %RAD51 Saturation Heatmap
 imagesc(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),Z_Heatmap_RAD51);
 title('RAD51 Saturation');
