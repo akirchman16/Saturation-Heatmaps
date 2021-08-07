@@ -307,7 +307,7 @@ delete(w);  %closes waitbar
 
 Shade = RAD51_Avg_Saturation./Total_Avg_Saturation; %percentage of saturation which is due to RAD51
 
-[X_Heatmap,Y_Heatmap] = meshgrid(k_on_RAD51_Values,k_off_RAD51_Values); %generates X and Y values for heatmaps
+[X_Heatmap,Y_Heatmap] = meshgrid(w_RAD51_Values,k_off_RPA_D_Values); %generates X and Y values for heatmaps
 Z_Heatmap_RAD51 = griddata(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),RAD51_Avg_Saturation,X_Heatmap(:),Y_Heatmap(:));  %generates heatmap data based on RAD51 saturation
 Z_Heatmap_RAD51 = reshape(Z_Heatmap_RAD51,size(X_Heatmap)); %reshapes RAD51 saturation data into appropriately sized matrix
 Z_Heatmap_RPA = griddata(Heatmap_Parameters(1,:),Heatmap_Parameters(2,:),RPA_Avg_Saturation,X_Heatmap(:),Y_Heatmap(:));  %generates heatmap data based on RPA saturation
