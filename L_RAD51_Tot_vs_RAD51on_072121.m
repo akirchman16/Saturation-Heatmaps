@@ -13,10 +13,10 @@ N = 5000;   %length of ssDNA lattice
 RAD51 = 51; %value that will be stored on lattice to represent bound RAD51
 n_RAD51 = 3;    %length of RAD51 protein
 
-L_RAD51_Total_Values = linspace(1,5,2);  %total concentration of RAD51 in solution
+L_RAD51_Total_Values = linspace(0.1,5,10);  %total concentration of RAD51 in solution
 Percent_M_RAD51 = 0.5;    %percentage of RAD51 solution which is monomers
 w_RAD51 = 1;    %cooperativity parameter for RAD51
-k_on_RAD51_Values = linspace(1,5,2);     %kinetic rate constant for RAD51 binding to ssDNA
+k_on_RAD51_Values = linspace(0.1,5,10);     %kinetic rate constant for RAD51 binding to ssDNA
 k_off_RAD51 = 1;    %kinetic rate constant for RAD51 dissociating from ssDNA
 
 % RPA Parameters
