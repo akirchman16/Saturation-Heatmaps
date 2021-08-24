@@ -14,7 +14,7 @@ RAD51 = 51; %value that will be stored on lattice to represent bound RAD51
 n_RAD51 = 3;    %length of RAD51 protein
 
 L_RAD51_Total = 2;  %total concentration of RAD51 in solution
-Percent_M_RAD51_Values = linspace(0,1,2);    %percentage of RAD51 solution which is monomers
+Percent_M_RAD51_Values = linspace(0,1,10);    %percentage of RAD51 solution which is monomers
 w_RAD51 = 1;    %cooperativity parameter for RAD51
 k_on_RAD51 = 1;     %kinetic rate constant for RAD51 binding to ssDNA
 k_off_RAD51 = 1;    %kinetic rate constant for RAD51 dissociating from ssDNA
@@ -27,7 +27,7 @@ n_D = 10;   %length of D component of RPA
 
 L_RPA = 2;  %concentration of RPA in solution
 w_RPA = 1;  %cooperativity parameter of RPA (for macroscopic binding)
-k_on_RPA_A_Values = linspace(1,10,2); %kinetic rate constant for RPA-A binding to ssDNA
+k_on_RPA_A_Values = linspace(1,100,10); %kinetic rate constant for RPA-A binding to ssDNA
 k_on_RPA_D = 15;  %kinetic rate constant for RPA-D binding to ssDNA
 k_off_RPA_A = 1; %kinetic rate constant for RPA-A dissociating from ssDNA
 k_off_RPA_D = 1; %kinetic rate constant for RPA-D dissociating from ssDNA
